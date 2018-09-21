@@ -3,19 +3,20 @@
 use actix::{dev::ToEnvelope, prelude::*};
 use actix_web::{AsyncResponder, HttpRequest, HttpResponse};
 use cbor::CborResponseBuilder;
-use database::UpdateSession;
+//use database::UpdateSession;
 use futures::Future;
 use http::{unpack_cbor, FutureResponse};
 use server::State;
 use token::Token;
 use webapp::protocol::{model::Session, request::LoginSession, response::Login};
+use ::Data;
 
 mod test;
 
-pub fn login_session<T>(http_request: &HttpRequest<State<T>>) -> FutureResponse
+pub fn login_session<T>(http_request: &HttpRequest<State>) -> FutureResponse
 where
-    T: Actor + Handler<UpdateSession>,
-    <T as Actor>::Context: ToEnvelope<T, UpdateSession>,
+    T: Actor + Handler<Data>,
+    <T as Actor>::Context: ToEnvelope<T, Data>,
 {
     let (request_clone, cbor) = unpack_cbor(http_request);
     // Create a new token for the already given one
@@ -25,12 +26,14 @@ where
         })
         // Update the session in the database
         .and_then(move |(new_token, old_token)| {
-            request_clone
+            Ok(HttpResponse::Ok().cbor(Login(Session { token: new_token }))?)
+            /* 
+              request_clone
                 .state()
                 .database
                 .send(UpdateSession { old_token, new_token })
                 .from_err()
-                .and_then(|result| Ok(HttpResponse::Ok().cbor(Login(result?))?))
+                .and_then(|result| Ok(HttpResponse::Ok().cbor(Login(result?))?)) */
         })
         .responder()
 }

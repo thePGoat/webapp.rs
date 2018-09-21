@@ -4,18 +4,20 @@
 #![allow(unknown_lints, proc_macro_derive_resolution_fallback)]
 
 extern crate failure;
-#[cfg(feature = "backend")]
-#[macro_use]
-extern crate diesel;
+
+//#[cfg(feature = "backend")]
+//#[macro_use]
+//extern crate diesel;
 #[macro_use]
 extern crate serde_derive;
 extern crate toml;
 
 pub mod config;
 pub mod protocol;
-#[cfg(feature = "backend")]
-#[allow(missing_docs)]
-pub mod schema;
+
+//#[cfg(feature = "backend")]
+//#[allow(missing_docs)]
+//pub mod schema;
 
 /// The global config file name
 pub const CONFIG_FILENAME: &str = "Config.toml";

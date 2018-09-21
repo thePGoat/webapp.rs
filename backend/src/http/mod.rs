@@ -20,8 +20,8 @@ pub type FutureResponse = Box<Future<Item = HttpResponse, Error = Error>>;
 
 /// Cbor unpacking helper, also returns a clone of the request reference
 pub fn unpack_cbor<A, D, M>(
-    http_request: &HttpRequest<State<A>>,
-) -> (HttpRequest<State<A>>, FromErr<CborRequest<D>, Error>)
+    http_request: &HttpRequest<State>,
+) -> (HttpRequest<State>, FromErr<CborRequest<D>, Error>)
 where
     M: Message,
     D: DeserializeOwned + 'static,

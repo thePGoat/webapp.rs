@@ -3,23 +3,27 @@
 use actix::{dev::ToEnvelope, prelude::*};
 use actix_web::{AsyncResponder, HttpRequest, HttpResponse};
 use cbor::CborResponseBuilder;
-use database::DeleteSession;
+//use database::DeleteSession;
 use futures::Future;
 use http::{unpack_cbor, FutureResponse};
 use server::State;
 use webapp::protocol::{model::Session, request, response};
 
+use ::Data;
+
 mod test;
 
-pub fn logout<T: Actor>(http_request: &HttpRequest<State<T>>) -> FutureResponse
+pub fn logout<T: Actor>(http_request: &HttpRequest<State>) -> FutureResponse
 where
-    T: Actor + Handler<DeleteSession>,
-    <T as Actor>::Context: ToEnvelope<T, DeleteSession>,
+    T: Actor + Handler<Data>,
+    <T as Actor>::Context: ToEnvelope<T, Data>
 {
     let (request_clone, cbor) = unpack_cbor(http_request);
     // Remove the session from the database
     cbor.and_then(move |request::Logout(Session { token })| {
         debug!("Session token {} wants to be logged out", token);
+        Ok(HttpResponse::Ok().cbor(response::Logout)?)
+        /*
         request_clone
             .state()
             .database
@@ -28,6 +32,6 @@ where
             .and_then(|result| {
                 result?;
                 Ok(HttpResponse::Ok().cbor(response::Logout)?)
-            })
+            })*/
     }).responder()
 }

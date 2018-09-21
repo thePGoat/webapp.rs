@@ -11,13 +11,13 @@ use actix_web::{
     middleware::{self, cors::Cors},
     server, App, HttpResponse,
 };
-use database::DatabaseExecutor;
-use diesel::{prelude::*, r2d2::ConnectionManager};
+//use database::DatabaseExecutor;
+//use diesel::{prelude::*, r2d2::ConnectionManager};
 use failure::Fallible;
 use http::{login_credentials, login_session, logout};
 use num_cpus;
 use openssl::ssl::{SslAcceptor, SslAcceptorBuilder, SslFiletype, SslMethod};
-use r2d2::Pool;
+//use r2d2::Pool;
 use std::thread;
 use url::Url;
 use webapp::{config::Config, API_URL_LOGIN_CREDENTIALS, API_URL_LOGIN_SESSION, API_URL_LOGOUT};
@@ -31,14 +31,10 @@ pub struct Server {
     url: Url,
 }
 
+
 /// Shared mutable application state
-pub struct State<T>
-where
-    T: Actor,
-{
-    /// The database connection
-    pub database: Addr<T>,
-}
+//pub struct State<T>(std::marker::PhantomData<T>) where T: Actor;
+pub struct State;
 
 impl Server {
     /// Create a new server instance
@@ -54,14 +50,14 @@ impl Server {
             config.postgres.host,
             config.postgres.database,
         );
-        let manager = ConnectionManager::<PgConnection>::new(database_url);
-        let pool = Pool::builder().build(manager)?;
-        let db_addr = SyncArbiter::start(num_cpus::get(), move || DatabaseExecutor(pool.clone()));
+        //let manager = ConnectionManager::<PgConnection>::new(database_url);
+        //let pool = Pool::builder().build(manager)?;
+        //let db_addr = SyncArbiter::start(num_cpus::get(), move || DatabaseExecutor(pool.clone()));
 
         // Create the server
         let server = server::new(move || {
             App::with_state(State {
-                database: db_addr.clone(),
+             //   database: db_addr.clone(),
             }).middleware(middleware::Logger::default())
             .configure(|app| {
                 Cors::for_app(app)

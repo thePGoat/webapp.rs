@@ -1,11 +1,11 @@
 //! Basic models
 
-#[cfg(feature = "backend")]
-use schema::sessions;
+//#[cfg(feature = "backend")]
+//use schema::sessions;
 use std::convert::From;
 
-#[cfg_attr(feature = "backend", derive(Insertable, Queryable))]
-#[cfg_attr(feature = "backend", table_name = "sessions")]
+//#[cfg_attr(feature = "backend", derive(Insertable, Queryable))]
+//#[cfg_attr(feature = "backend", table_name = "sessions")]
 #[derive(Debug, PartialEq, Deserialize, Serialize)]
 /// A session representation
 pub struct Session {
