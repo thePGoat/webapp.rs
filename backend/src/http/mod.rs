@@ -17,19 +17,3 @@ use server::State;
 
 /// The generic response
 pub type FutureResponse = Box<Future<Item = HttpResponse, Error = Error>>;
-
-/// Cbor unpacking helper, also returns a clone of the request reference
-pub fn unpack_cbor<A, D, M>(
-    http_request: &HttpRequest<State>,
-) -> (HttpRequest<State>, FromErr<CborRequest<D>, Error>)
-where
-    M: Message,
-    D: DeserializeOwned + 'static,
-    A: Actor + Handler<M>,
-    <A as Actor>::Context: ToEnvelope<A, M>,
-{
-    (
-        http_request.clone(),
-        CborRequest::new(http_request).from_err(),
-    )
-}

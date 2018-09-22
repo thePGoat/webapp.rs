@@ -6,7 +6,7 @@
 extern crate actix;
 extern crate actix_web;
 extern crate bytes;
-//extern crate diesel;
+// extern crate diesel;
 #[macro_use]
 extern crate failure;
 extern crate futures;
@@ -15,7 +15,7 @@ extern crate jsonwebtoken;
 extern crate log;
 extern crate num_cpus;
 extern crate openssl;
-//extern crate r2d2;
+// extern crate r2d2;
 extern crate serde;
 extern crate serde_cbor;
 #[macro_use]
@@ -26,18 +26,18 @@ extern crate uuid;
 extern crate webapp;
 
 mod cbor;
-//mod database;
+// mod database;
 mod http;
 mod server;
 mod token;
 
 pub use server::Server;
 
-
 use actix::prelude::*;
 use failure::Fallible;
-use webapp::{protocol::model::Session};
+use webapp::protocol::model::Session;
 
+/// Documentation
 pub struct Data(pub String);
 
 impl Message for Data {
@@ -46,7 +46,6 @@ impl Message for Data {
 
 impl From<String> for Data {
     fn from(s: String) -> Data {
-       Data(s)
+        Data(s)
     }
 }
-
